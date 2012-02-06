@@ -1,0 +1,30 @@
+body{
+    margin: 2px, 50%;
+    padding: 0;
+    background-image: url('../images/stripe.png');
+}
+
+.box {
+  margin: 5px;
+  padding: 5px;
+  background: #D8D5D2;
+  font-size: 11px;
+  line-height: 1.4em;
+  float: left;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;
+}
+
+.box img{
+  display: block;
+  /*width: 100%;*/
+  max-width: 300px;
+}
+
+.logo{
+    padding: 3px;
+    font-size: 72px;
+    font-family: 'Geo', sans-serif;
+}
+

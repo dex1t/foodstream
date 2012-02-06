@@ -1,0 +1,70 @@
+<script src="/socket.io/socket.io.js"></script>
+<script src="/javascripts/jquery-1.7.1.min.js"></script>
+<script src="/javascripts/jquery.masonry.js"></script>
+<script src="/javascripts/jquery-ui-1.8.17.custom.min.js"></script>
+<link href='http://fonts.googleapis.com/css?family=Geo|Asap' rel='stylesheet' type='text/css'>
+
+<script type="text/javascript">
+count = 0;
+$(function(){
+
+        socket = io.connect();
+        $container = $('#stream');
+        $container.imagesLoaded(function(){
+                $container.masonry({
+                        itemSelector: ".box",
+                        columnWidth: 10,
+                        isAnimated: true
+                    });
+            });
+        socket.on('connect', function(msg){
+                $('#logo').effect("shake");
+                console.log("connect");
+            });
+        // 画像urlを受け取ったとき
+        socket.on('image', function(msg) {
+                $img = $('<img>').attr('src', msg.url+"?size=t");
+                //$p = $('<p>').append($img, msg.user+": "+msg.text);
+                $div = $('<div>').addClass("box masonry").attr('id', msg.twid).attr('title', msg.text).append($img);
+                $div.click(function(){
+                        $(this).effect("pulsate");
+                        socket.emit("effect", msg.twid);
+                    });
+                $div.imagesLoaded(function(){
+                        $container.prepend($div).masonry('reload');
+                        checkCount();
+                    });
+            });
+
+        // youtubeurlを受け取ったとき
+        socket.on('movie', function(msg) {
+                $ifrm = $('<iframe>').attr('width', 300).attr('height', 182).attr('frameborder', 0);
+                $ifrm = $ifrm.attr('src', msg.url);
+                $div = $('<div>').addClass("box masonry").attr('id', msg.twid).append($ifrm);
+                $container.prepend($div).masonry('reload');
+                checkCount();
+            });
+
+        socket.on('effect', function(msg){
+                $('#'+msg).effect("pulsate");
+            });
+
+        var select = $('select[name="ch"]');
+        select.change(function(){
+                socket.emit('ch', {value: $(this).val()});
+                console.log($(this).val());
+            });
+    });
+
+function checkCount(){
+    count++;
+    if(count > 30){
+        $('#stream div:last-child').remove();
+        $container.masonry('reload');
+        count--;
+    }
+}
+</script>
+
+<div id="logo" class="logo">Food Stream</div>
+<div id="stream"></div>
