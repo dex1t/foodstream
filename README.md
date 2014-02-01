@@ -19,3 +19,7 @@ Install Dependencies
 
     % npm install socket.io ntwitter express
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/dex1t/foodstream/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
